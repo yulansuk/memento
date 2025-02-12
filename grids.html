@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid Reveal</title>
+  <style>
+    * {
+      margin: 10;
+      padding: 10;
+      box-sizing: border-box;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr); /* Ensures no extra space */
+      grid-template-rows: repeat(3, 1fr); /* Makes squares fill full height */
+      gap: 4px;
+      width: 100vw;
+      height: 100vh; /* Fills full screen height */
+    }
+
+    .grid-item {
+      position: relative;
+      overflow: hidden;
+      opacity: 0; 
+      transition: opacity 0.5s ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-family: monospace;
+      color: white;
+    }
+
+    .grid-item.visible {
+      opacity: 1;
+    }
+
+    /* Keep existing colors */
+    .item1 { background: #FFC8A9; }
+    .item2 { background: #90A959; }
+    .item3 { background: #FFC8A9; }
+    .item4 { background: white; }
+    .item5 { background: #90A959; }
+    .item6 { background: #1D1D1D; }
+    .item7 { background: #90A959; }
+    .item8 { background: #8B9DFF; }
+    .item9 { background: #8B9DFF; }
+    .item10 { background: #FFC8A9; }
+    .item11 { background: #FFC8A9; }
+    .item12 { background: #90A959; }
+
+    @media (max-width: 768px) {
+      .grid-container {
+        grid-template-columns: repeat(2, 1fr); /* Adjusts for smaller screens */
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-container">
+    <div class="grid-item item1" data-row="1" data-col="1"></div>
+    <div class="grid-item item2" data-row="1" data-col="2">
+      <p>i remember: the way<br>you'd hold my hand in<br>both of yours.</p>
+    </div>
+    <div class="grid-item item3" data-row="1" data-col="3"></div>
+    <div class="grid-item item4" data-row="1" data-col="4"></div>
+    <div class="grid-item item5" data-row="2" data-col="1">
+      <p>the way you'd ask<br>smiling..??</p>
+    </div>
+    <div class="grid-item item6" data-row="2" data-col="2"></div>
+    <div class="grid-item item7" data-row="2" data-col="3"></div>
+    <div class="grid-item item8" data-row="2" data-col="4">
+      <p>i remember: the way<br>you'd hold my hand in<br>both of yours.</p>
+    </div>
+    <div class="grid-item item9" data-row="3" data-col="1"></div>
+    <div class="grid-item item10" data-row="3" data-col="2"></div>
+    <div class="grid-item item11" data-row="3" data-col="3">
+      <p>the way you'd ask<br>smiling..??</p>
+    </div>
+    <div class="grid-item item12" data-row="3" data-col="4"></div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.grid-item').forEach(item => {
+      item.addEventListener('click', () => {
+        revealAdjacent(item);
+      });
+    });
+
+    function revealAdjacent(item) {
+      const row = parseInt(item.getAttribute('data-row'));
+      const col = parseInt(item.getAttribute('data-col'));
+
+      item.classList.add('visible');
+
+      document.querySelectorAll('.grid-item').forEach(adjItem => {
+        const adjRow = parseInt(adjItem.getAttribute('data-row'));
+        const adjCol = parseInt(adjItem.getAttribute('data-col'));
+
+        if (
+          (adjRow === row && (adjCol === col - 1 || adjCol === col + 1)) || 
+          (adjCol === col && (adjRow === row - 1 || adjRow === row + 1))
+        ) {
+          adjItem.classList.add('visible');
+        }
+      });
+    }
+  </script>
+</body>
+</html>
