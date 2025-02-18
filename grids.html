@@ -139,13 +139,14 @@
       padding: 15px;
       border-radius: 50%;
       cursor: pointer;
-      z-index: 11;
+      z-index: 999;
       display: block;
       box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
     }
 
     .next-arrow.visible {
       opacity: 1;
+      display: block;
     }
 
     .next-arrow:hover {
@@ -183,6 +184,21 @@
         font-size: 12px;
         padding: 5px;
       }
+
+      .next-arrow {
+        bottom: 20px;
+        right: 20px;
+        z-index: 999;
+        display: none;
+        position: fixed;
+        padding: 15px;
+        background-color: rgba(255, 255, 255, 0.5);
+      }
+
+      .next-arrow.visible {
+        display: block;
+        opacity: 1;
+      }
     }
 
     @media screen and (max-width: 390px) {
@@ -202,14 +218,20 @@
       }
 
       .next-arrow {
-        bottom: 10px;
-        right: 10px;
-        padding: 10px;
+        bottom: 20px;
+        right: 20px;
+        padding: 12px;
+        z-index: 999;
       }
 
       .next-arrow svg {
         width: 30px;
         height: 30px;
+      }
+
+      .next-arrow.visible {
+        display: block;
+        opacity: 1;
       }
     }
   </style>
@@ -323,13 +345,21 @@
         }
       });
 
+      // Check if all visible items are revealed
       const allItems = document.querySelectorAll('.grid-item');
-      const allRevealed = Array.from(allItems).every(item => item.classList.contains('visible'));
-      
-      if (allRevealed) {
+      const visibleItems = document.querySelectorAll('.grid-item.visible');
+      const isMobile = window.innerWidth <= 768;
+      const requiredVisible = isMobile ? 6 : 12; // 6 items for mobile, 12 for desktop
+
+      if (visibleItems.length >= requiredVisible) {
         const nextArrow = document.querySelector('.next-arrow');
         nextArrow.style.display = 'block';
         nextArrow.classList.add('visible');
+        
+        // Force repaint
+        setTimeout(() => {
+          nextArrow.style.opacity = '1';
+        }, 0);
       }
     }
   </script>
