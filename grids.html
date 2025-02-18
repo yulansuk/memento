@@ -17,18 +17,63 @@
       width: 100%;
     }
 
+    .music-toggle {
+      position: fixed;
+      top: 25px;
+      left: 25px;
+      z-index: 999;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+      background-color: rgba(255, 255, 255, 0.3);
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .music-toggle:hover {
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .music-toggle svg {
+      width: 40px;
+      height: 40px;
+      stroke: white;
+    }
+
     .typing-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: rgba(106, 128, 125, 0.8);
+      background-color: rgba(91, 160, 216, 0.8);
       display: flex;
       justify-content: center;
       align-items: center; 
       z-index: 10;
       transition: opacity 1s ease-out;
+    }
+
+    .grid-item img[src*="ball.png"],
+    .grid-item img[src*="piano.png"],
+    .grid-item img[src*="pencil.png"] {
+        width: 200%; 
+        height: 150%;  
+        object-fit: cover;
+    }
+
+    .item1 img[src*="ball.png"] { transform: translate(0%, 0%); }
+    .item6 img[src*="piano.png"] { transform: translate(-12.5%, -16.66%); }
+    .item11 img[src*="pencil.png"] { transform: translate(-25%, -33.33%); }
+
+    @media screen and (max-width: 768px) {
+        .grid-item img[src*="ball.png"],
+        .grid-item img[src*="piano.png"],
+        .grid-item img[src*="pencil.png"] {
+            width: 400%;
+            height: 150%;
+        }
     }
 
     .typing-text {
@@ -237,6 +282,17 @@
   </style>
 </head>
 <body>
+  <audio id="bgMusic" loop>
+    <source src="imgs/playground-7156.mp3" type="audio/mpeg">
+  </audio>
+
+  <button class="music-toggle" onclick="toggleMusic()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+    </svg>
+  </button>
+
   <div class="typing-container">
     <div class="typing-text"></div>
   </div>
@@ -247,11 +303,12 @@
 
   <div class="grid-container">
     <div class="grid-item item1" data-row="1" data-col="1">
-        <img src="imgs/infinity.png" alt="Grid Section 1">
+        <img src="imgs/ball.png" alt="Grid Section 1">
+        <p>the way that you would play with me<br>you would watch me run and hop<br>the sky was always going to be ours. </p>
     </div>
     <div class="grid-item item2" data-row="1" data-col="2">
         <img src="imgs/infinity.png" alt="Grid Section 2">
-        <p>i remember: the way<br>you'd hold my hand in<br>both of yours.</p>
+       
     </div>
     <div class="grid-item item3" data-row="1" data-col="3">
         <img src="imgs/infinity.png" alt="Grid Section 3">
@@ -261,10 +318,10 @@
     </div>
     <div class="grid-item item5" data-row="2" data-col="1">
         <img src="imgs/infinity.png" alt="Grid Section 5">
-        <p>the way you'd ask<br>smiling..??</p>
     </div>
     <div class="grid-item item6" data-row="2" data-col="2">
-        <img src="imgs/infinity.png" alt="Grid Section 6">
+        <img src="imgs/piano.png" alt="Grid Section 6">
+        <p>the way that you taught me piano<br>you'd hold my hand in<br>both of yours.</p>
     </div>
     <div class="grid-item item7" data-row="2" data-col="3">
         <img src="imgs/infinity.png" alt="Grid Section 7">
@@ -279,14 +336,15 @@
         <img src="imgs/infinity.png" alt="Grid Section 10">
     </div>
     <div class="grid-item item11" data-row="3" data-col="3">
-        <img src="imgs/infinity.png" alt="Grid Section 11">
+        <img src="imgs/pencil.png" alt="Grid Section 11">
+        <p>i remember: the way<br>you taught me how to draw<br>i had always aspired to be like you.</p>
     </div>
     <div class="grid-item item12" data-row="3" data-col="4">
         <img src="imgs/infinity.png" alt="Grid Section 12">
     </div>
   </div>
 
-  <a href="your-next-page.html" class="next-arrow">
+  <a href="grids2.html" class="next-arrow">
     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="5" y1="12" x2="19" y2="12"></line>
         <polyline points="12 5 19 12 12 19"></polyline>
@@ -294,6 +352,40 @@
   </a>
 
   <script>
+    let isPlaying = false;
+    const music = document.getElementById('bgMusic');
+    
+    function toggleMusic() {
+      const toggleBtn = document.querySelector('.music-toggle svg');
+      
+      if (isPlaying) {
+        music.pause();
+        toggleBtn.innerHTML = `
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <line x1="23" y1="9" x2="17" y2="15"></line>
+          <line x1="17" y1="9" x2="23" y2="15"></line>
+        `;
+      } else {
+        music.play();
+        toggleBtn.innerHTML = `
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        `;
+      }
+      isPlaying = !isPlaying;
+    }
+
+    // Set up music
+    music.volume = 0.4;
+    music.preload = 'auto';
+    music.load();
+
+    // Single event listener for first interaction
+    document.addEventListener('click', function initMusic() {
+      music.play().catch(() => {}); // Catch and ignore autoplay errors
+      document.removeEventListener('click', initMusic);
+    }, { once: true });
+
     async function typeText(text, element, speed = 100) {
       for (let i = 0; i < text.length; i++) {
         element.textContent += text[i];
@@ -345,18 +437,16 @@
         }
       });
 
-      // Check if all visible items are revealed
       const allItems = document.querySelectorAll('.grid-item');
       const visibleItems = document.querySelectorAll('.grid-item.visible');
       const isMobile = window.innerWidth <= 768;
-      const requiredVisible = isMobile ? 6 : 12; // 6 items for mobile, 12 for desktop
+      const requiredVisible = isMobile ? 6 : 12;
 
       if (visibleItems.length >= requiredVisible) {
         const nextArrow = document.querySelector('.next-arrow');
         nextArrow.style.display = 'block';
         nextArrow.classList.add('visible');
         
-        // Force repaint
         setTimeout(() => {
           nextArrow.style.opacity = '1';
         }, 0);

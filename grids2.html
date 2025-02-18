@@ -6,25 +6,48 @@
   <title>Grid Reveal</title>
   <style>
     * {
-      margin: 10;
-      padding: 10;
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
     }
 
     body, html {
-      overflow: visible;
-      margin: 0;
-      padding: 0;
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
     }
 
-    /* Add typing animation styles */
+    .music-toggle {
+      position: fixed;
+      top: 25px;
+      left: 25px;
+      z-index: 999;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+      background-color: rgba(255, 255, 255, 0.3);
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .music-toggle:hover {
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .music-toggle svg {
+      width: 40px;
+      height: 40px;
+      stroke: white;
+    }
+
     .typing-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: rgba(106, 128, 125, 0.8);
+      background-color: rgba(91, 160, 216, 0.8);
       display: flex;
       justify-content: center;
       align-items: center; 
@@ -38,7 +61,7 @@
       font-size: 14px;
       white-space: pre-wrap;
       overflow: hidden;
-      border-right: 2px solid white;
+      border-right: 2px solid rgb(255, 255, 255);
       width: fit-content;
       margin: 0 auto;
     }
@@ -70,10 +93,10 @@
       gap: 0px;
       width: 100vw;
       height: 100vh;
-      overflow: visible;
+      overflow: hidden;
       position: relative;
       z-index: 1;
-      pointer-events: none; /* Initially disable grid clicking */
+      pointer-events: none;
     }
 
     .grid-container.clickable {
@@ -81,7 +104,7 @@
     }
 
     .grid-item {
-      cursor: url('imgs/cursor.png'), auto;
+      cursor: pointer;
       position: relative;
       opacity: 0; 
       transition: opacity 0.5s ease-in-out;
@@ -90,8 +113,8 @@
       justify-content: center;
       font-size: 14px;
       font-family: monospace;
-      color: white;
-      border: .5px solid white;
+      color: rgb(255, 255, 255);
+      border: .5px solid rgb(255, 255, 255);
       overflow: hidden;
     } 
 
@@ -117,17 +140,29 @@
     .item11 img { transform: translate(-50%, -66.66%); }
     .item12 img { transform: translate(-75%, -66.66%); }
 
+    .grid-item img[src*="dogs.png"],
+    .grid-item img[src*="daffidols.png"],
+    .grid-item img[src*="chilis.png"],
+    .grid-item img[src*="kimchi.png"] {
+        width: 200%;
+        height: 150%;
+        object-fit: cover;
+    }
+
+    .item4 img[src*="dogs.png"] { transform: translate(-25%, -16.66%); }
+    .item8 img[src*="daffidols.png"] { transform: translate(-12.5%, -16.66%); }
+    .item12 img[src*="chilis.png"] { transform: translate(0%, -33.33%); }
+    .item2 img[src*="kimchi.png"] {
+        transform: translate(0%, -33.33%);
+    }
+
     .grid-item p {
       position: relative;
       z-index: 1;
       text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
       padding: 10px;
-      background-color: rgba(255, 255, 255, 0.3);
+      background-color: rgba(20, 20, 25, 0.354);
       border-radius: 5px;
-    }
-
-    .grid-item:not(.visible):hover {
-      cursor: url('imgs/cursor.png'), pointer;
     }
 
     .grid-item.visible {
@@ -144,13 +179,14 @@
       padding: 15px;
       border-radius: 50%;
       cursor: pointer;
-      z-index: 11;
+      z-index: 999;
       display: block;
       box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
     }
 
     .next-arrow.visible {
       opacity: 1;
+      display: block;
     }
 
     .next-arrow:hover {
@@ -158,96 +194,81 @@
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
     }
 
-    /* Media Queries for iPhone and smaller screens */
     @media screen and (max-width: 768px) {
       .grid-container {
-        grid-template-columns: repeat(2, 1fr);
-        grid-auto-rows: 1fr;
+        grid-template-columns: repeat(2, 50%);
+        grid-template-rows: repeat(3, 33.333vh);
         height: 100vh;
         width: 100vw;
-        aspect-ratio: 1/1;
+        gap: 0;
       }
 
       .grid-item {
-        font-size: 12px;
-        aspect-ratio: 1/1;
-        position: relative;
+        height: 33.333vh;
         width: 100%;
-        padding-bottom: 100%; /* This ensures square aspect ratio */
-      }
-
-      .grid-item p {
-        padding: 5px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 90%;
-        text-align: center;
       }
 
       .grid-item img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+        width: 800%;
+        height: 300%;
+      }
+
+      .item1 img { transform: translate(0%, 0%); }
+      .item2 img { transform: translate(-12.5%, 0%); }
+      .item3 img { transform: translate(-25%, -33.33%); }
+      .item4 img { transform: translate(-37.5%, -33.33%); }
+      .item5 img { transform: translate(-50%, -66.66%); }
+      .item6 img { transform: translate(-62.5%, -66.66%); }
+
+      .grid-item img[src*="tv.png"],
+      .grid-item img[src*="pears.png"],
+      .grid-item img[src*="incense.png"] {
+        width: 400%;
+        height: 150%;
+      }
+
+      .grid-item p {
+        font-size: 12px;
+        padding: 5px;
+      }
+
+      .next-arrow {
+        bottom: 20px;
+        right: 20px;
+        z-index: 999;
+        display: none;
+        position: fixed;
+        padding: 15px;
+        background-color: rgba(255, 255, 255, 0.5);
+      }
+
+      .next-arrow.visible {
+        display: block;
+        opacity: 1;
       }
     }
 
     @media screen and (max-width: 390px) {
       .grid-container {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-auto-rows: 1fr;
-        gap: 1px;
-        width: 100vw;
-        height: auto;
-        min-height: 100vh;
-        overflow-y: auto;
-        padding-bottom: env(safe-area-inset-bottom);
+        grid-template-columns: repeat(2, 50%);
+        grid-template-rows: repeat(3, 33.333vh);
       }
 
       .grid-item {
-        aspect-ratio: 1/1;
+        height: 33.333vh;
         width: 100%;
-        height: 0;
-        padding-bottom: 100%;
-        position: relative;
-      }
-
-      .grid-item img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      .typing-text {
-        font-size: 12px;
-        padding: 0 20px;
-        text-align: center;
       }
 
       .grid-item p {
         font-size: 10px;
         padding: 3px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 90%;
-        text-align: center;
-        margin: 0;
       }
 
       .next-arrow {
-        bottom: max(10px, env(safe-area-inset-bottom));
-        right: 10px;
-        padding: 10px;
+        bottom: 20px;
+        right: 20px;
+        padding: 12px;
+        z-index: 999;
       }
 
       .next-arrow svg {
@@ -255,34 +276,25 @@
         height: 30px;
       }
 
-      body {
-        min-height: 100vh;
-        min-height: -webkit-fill-available;
-      }
-      
-      html {
-        height: -webkit-fill-available;
-      }
-    }
-
-    /* iPhone-specific fixes for notch and safe areas */
-    @supports (-webkit-touch-callout: none) {
-      .grid-container {
-        padding-top: env(safe-area-inset-top);
-        padding-bottom: env(safe-area-inset-bottom);
-        padding-left: env(safe-area-inset-left);
-        padding-right: env(safe-area-inset-right);
-      }
-
-      .next-arrow {
-        bottom: calc(10px + env(safe-area-inset-bottom));
-        right: calc(10px + env(safe-area-inset-right));
+      .next-arrow.visible {
+        display: block;
+        opacity: 1;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Add typing overlay -->
+  <audio id="bgMusic" loop>
+    <source src="imgs/city-traffic-120420.mp3" type="audio/mpeg">
+  </audio>
+
+  <button class="music-toggle" onclick="toggleMusic()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+    </svg>
+  </button>
+
   <div class="typing-container">
     <div class="typing-text"></div>
   </div>
@@ -293,48 +305,49 @@
 
   <div class="grid-container">
     <div class="grid-item item1" data-row="1" data-col="1">
-        <img src="imgs/infinity.png" alt="Grid Section 1">
+        <img src="imgs/loveisa.png" alt="Grid Section 1">
     </div>
     <div class="grid-item item2" data-row="1" data-col="2">
-        <img src="imgs/infinity.png" alt="Grid Section 2">
-        <p>i remember: the way<br>you'd hold my hand in<br>both of yours.</p>
+        <img src="imgs/kimchi.png" alt="Grid Section 2">
+        <p>the realization hits me that<br>you will never watch me again.</p>
     </div>
     <div class="grid-item item3" data-row="1" data-col="3">
-        <img src="imgs/infinity.png" alt="Grid Section 3">
+        <img src="imgs/loveisa.png" alt="Grid Section 3">
     </div>
     <div class="grid-item item4" data-row="1" data-col="4">
-        <img src="imgs/infinity.png" alt="Grid Section 4">
+        <img src="imgs/dogs.png" alt="Grid Section 4">
+        <p>you will never see the masterpiece <br>that you begun, nor the pieces<br>that will be played.</p>
     </div>
     <div class="grid-item item5" data-row="2" data-col="1">
-        <img src="imgs/infinity.png" alt="Grid Section 5">
-        <p>the way you'd ask<br>smiling..??</p>
+        <img src="imgs/loveisa.png" alt="Grid Section 5">
+        
     </div>
     <div class="grid-item item6" data-row="2" data-col="2">
-        <img src="imgs/infinity.png" alt="Grid Section 6">
+        <img src="imgs/loveisa.png" alt="Grid Section 6">
     </div>
     <div class="grid-item item7" data-row="2" data-col="3">
-        <img src="imgs/infinity.png" alt="Grid Section 7">
+        <img src="imgs/loveisa.png" alt="Grid Section 7">
     </div>
     <div class="grid-item item8" data-row="2" data-col="4">
-        <img src="imgs/infinity.png" alt="Grid Section 8">
-        <p>i remember: the way<br>you'd hold my hand in<br>both of yours.</p>
+        <img src="imgs/daffidols.png" alt="Grid Section 8">
+        <p>i look towards my audience, <br>and see that you are not there.</p>
     </div>
     <div class="grid-item item9" data-row="3" data-col="1">
-        <img src="imgs/infinity.png" alt="Grid Section 9">
+        <img src="imgs/loveisa.png" alt="Grid Section 9">
     </div>
     <div class="grid-item item10" data-row="3" data-col="2">
-        <img src="imgs/infinity.png" alt="Grid Section 10">
+        <img src="imgs/loveisa.png"alt="Grid Section 10">
     </div>
     <div class="grid-item item11" data-row="3" data-col="3">
-        <img src="imgs/infinity.png" alt="Grid Section 11">
-        <p>the way you'd ask<br>smiling..??</p>
+        <img src="imgs/loveisa.png" alt="Grid Section 11">
     </div>
     <div class="grid-item item12" data-row="3" data-col="4">
-        <img src="imgs/infinity.png" alt="Grid Section 12">
+        <img src="imgs/chilis.png" alt="Grid Section 12">
+        <p>i wonder, if it'll ever be the same<br>as i look upon your empty seat.</p>
     </div>
   </div>
 
-  <a href="your-next-page.html" class="next-arrow">
+  <a href="grids3.html" class="next-arrow">
     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="5" y1="12" x2="19" y2="12"></line>
         <polyline points="12 5 19 12 12 19"></polyline>
@@ -342,6 +355,38 @@
   </a>
 
   <script>
+    let isPlaying = false;
+    const music = document.getElementById('bgMusic');
+    
+    function toggleMusic() {
+      const toggleBtn = document.querySelector('.music-toggle svg');
+      
+      if (isPlaying) {
+        music.pause();
+        toggleBtn.innerHTML = `
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <line x1="23" y1="9" x2="17" y2="15"></line>
+          <line x1="17" y1="9" x2="23" y2="15"></line>
+        `;
+      } else {
+        music.play();
+        toggleBtn.innerHTML = `
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        `;
+      }
+      isPlaying = !isPlaying;
+    }
+
+    music.volume = 0.4;
+    music.preload = 'auto';
+    music.load();
+
+    document.addEventListener('click', function initMusic() {
+      music.play().catch(() => {});
+      document.removeEventListener('click', initMusic);
+    }, { once: true });
+
     async function typeText(text, element, speed = 100) {
       for (let i = 0; i < text.length; i++) {
         element.textContent += text[i];
@@ -350,13 +395,12 @@
       return new Promise(resolve => setTimeout(resolve, 1000));
     }
 
-    // Initialize the sequence
     async function initializeSequence() {
       const typingContainer = document.querySelector('.typing-container');
       const typingText = document.querySelector('.typing-text');
       const gridContainer = document.querySelector('.grid-container');
       
-      const text = "do you remember...?";
+      const text = "do you know...?";
       
       await typeText(text, typingText);
       
@@ -394,14 +438,19 @@
         }
       });
 
-      // Check if all grid items are revealed
       const allItems = document.querySelectorAll('.grid-item');
-      const allRevealed = Array.from(allItems).every(item => item.classList.contains('visible'));
-      
-      if (allRevealed) {
+      const visibleItems = document.querySelectorAll('.grid-item.visible');
+      const isMobile = window.innerWidth <= 768;
+      const requiredVisible = isMobile ? 6 : 12;
+
+      if (visibleItems.length >= requiredVisible) {
         const nextArrow = document.querySelector('.next-arrow');
-        nextArrow.style.display = 'block'; // Ensure it's displayed
-        nextArrow.classList.add('visible'); // Add visible class for opacity
+        nextArrow.style.display = 'block';
+        nextArrow.classList.add('visible');
+        
+        setTimeout(() => {
+          nextArrow.style.opacity = '1';
+        }, 0);
       }
     }
   </script>
